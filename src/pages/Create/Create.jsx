@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createDog, getTemperaments } from "../../redux/actions/actions";
 import styles from "./Create.module.css";
+import { uploadImage } from "../../firebase/client";
+import imageCompression from "browser-image-compression";
 
 export default function Create() {
 	const dispatch = useDispatch();
@@ -13,6 +15,7 @@ export default function Create() {
 		if (a.name < b.name) return -1;
 		return 0;
 	});
+	const [imageURL, setImageURL] = useState(null);
 
 	const [input, setInput] = useState({
 		name: "",
@@ -145,7 +148,60 @@ export default function Create() {
 				tempselect.selectedIndex = 0;
 			});
 		} else {
-			alert("Please, check the form");
+			alert("Please, check the form for errors.");
+		}
+	};
+
+	const handleChangeImage = async (e) => {
+		const file = e.target.files[0];
+		const options = {
+			maxSizeMB: 1,
+			maxWidthOrHeight: 1920,
+		};
+
+		if (!file) {
+			setImageURL(null);
+			return;
+		}
+		if (
+			!file.type.includes("image/png") &&
+			!file.type.includes("image/jpeg") &&
+			!file.type.includes("image/jpg")
+		) {
+			alert("Only images in PNG, JPEG or JPG format are allowed");
+			return;
+		}
+
+		if (file.size > 5000000) {
+			alert("The image must be less than 5MB");
+			return;
+		}
+
+		try {
+			const compressedFile = await imageCompression(file, options);
+			const task = uploadImage(compressedFile);
+			task.on(
+				"state_changed",
+				(snapshot) => {
+					const percentage =
+						(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+					console.log(percentage);
+				},
+				(error) => {
+					console.log(error);
+				},
+				() => {
+					task.snapshot.ref.getDownloadURL().then((url) => {
+						setImageURL(url);
+						setInput({
+							...input,
+							image: url,
+						});
+					});
+				}
+			);
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
@@ -291,17 +347,17 @@ export default function Create() {
 							)}
 						</div>
 						<div className={styles.inputContainer}>
-							<label htmlFor="image" className={styles.label}>
-								Image:
+							<p className={styles.label}>Imagen:</p>
+							<label htmlFor="image" className={styles.labelImg}>
+								Subir imagen
 							</label>
 							<input
-								type="text"
+								type="file"
 								name="image"
 								id="image"
-								placeholder="Enter an image url..."
-								value={input.image}
-								onChange={handleInputChange}
-								className={styles.input}
+								accept="image/png, image/jpeg, image/jpg"
+								onChange={handleChangeImage}
+								className={styles.file}
 							/>
 							<p className={styles.previewTxt}>Preview:</p>
 							<img
