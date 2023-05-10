@@ -197,3 +197,9 @@
 	color: #fff;
 	border: 2px solid #ae6d18;
 }
+
+@media (max-width: 768px) {
+	.preview {
+		width: 300px;
+	}
+}
