@@ -2,7 +2,16 @@ import { useParams } from "react-router-dom";
 import styles from "./Detail.module.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { cleanState, getDogDetails } from "../../redux/actions/actions";
+import {
+	cleanState,
+	getDogDetails,
+	setCurrentPageGlobal,
+	setCurrentFilterByCreated,
+	setCurrentFilterByTemperament,
+	setCurrentOrderByWeight,
+	setCurrentOrderByName,
+	filterDogsByTemperamentAndCreated,
+} from "../../redux/actions/actions";
 import { LoaderComponent } from "../../components";
 import LoaderGif from "../../assets/images/loader.gif";
 import { Link } from "react-router-dom";
@@ -32,6 +41,15 @@ export default function Detail() {
 
 	const imageSrc = image && image.url ? image.url : image ? image : LoaderGif;
 
+	const handleFilterTemp = (e) => {
+		dispatch(setCurrentPageGlobal(1));
+		dispatch(setCurrentFilterByCreated("default"));
+		dispatch(setCurrentFilterByTemperament(e.target.innerText));
+		dispatch(filterDogsByTemperamentAndCreated(e.target.innerText, "default"));
+		dispatch(setCurrentOrderByWeight("default"));
+		dispatch(setCurrentOrderByName("default"));
+	};
+
 	return (
 		<>
 			{!dog.name ? (
@@ -59,7 +77,16 @@ export default function Detail() {
 									temperament
 										.join(", ")
 										.split(", ")
-										.map((temp) => <p className={styles.temperament}>{temp}</p>)
+										.map((temp) => (
+											<Link
+												to={`/home`}
+												key={temp}
+												className={styles.temperament}
+												onClick={handleFilterTemp}
+											>
+												{temp}
+											</Link>
+										))
 								)}
 							</div>
 							<h3>

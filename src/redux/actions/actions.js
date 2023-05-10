@@ -18,6 +18,7 @@ import {
 	SET_CURRENT_ORDER_BY_WEIGHT,
 	SET_CURRENT_SEARCH,
 	RESET_STATE,
+	RESET_FILTERS_AND_ORDER,
 } from "./types";
 
 export const getDogs = () => async (dispatch) => {
@@ -176,5 +177,12 @@ export const resetState = () => (dispatch) => {
 	// Dispatch the action
 	dispatch({
 		type: RESET_STATE,
+	});
+};
+
+export const resetFiltersAndOrder = () => (dispatch) => {
+	// Dispatch the action
+	dispatch({
+		type: RESET_FILTERS_AND_ORDER,
 	});
 };

@@ -56,6 +56,14 @@
 	border-radius: 5px;
 	background-color: #ced89d;
 	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color 0.25s, color 0.25s;
+}
+
+.temperament:hover {
+	background-color: #7f855f;
+	color: #fff;
 }
 
 .span {

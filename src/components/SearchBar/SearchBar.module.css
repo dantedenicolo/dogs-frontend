@@ -72,6 +72,14 @@
 	color: #575e55;
 }
 
+.input:focus + .reset {
+	color: #575e55;
+}
+
+.input:focus + .reset:hover {
+	color: #454a43;
+}
+
 .input:focus::placeholder {
 	color: #575e55;
 }
@@ -79,4 +87,26 @@
 .input:not(:placeholder-shown) {
 	background-color: #e8a249;
 	color: #575e55;
+}
+
+.input:not(:placeholder-shown) + .reset {
+	color: #575e55;
+}
+
+.input:not(:placeholder-shown) + .reset:hover {
+	color: #454a43;
+}
+
+.reset {
+	position: absolute;
+	margin-left: 80px;
+	cursor: pointer;
+	color: #e8a249;
+	font-size: 0.9rem;
+	font-weight: 700;
+	transition: color 0.25s;
+}
+
+.reset:hover {
+	color: #ae6d18;
 }

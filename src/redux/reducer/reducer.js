@@ -15,6 +15,7 @@ import {
 	SET_CURRENT_ORDER_BY_WEIGHT,
 	SET_CURRENT_SEARCH,
 	RESET_STATE,
+	RESET_FILTERS_AND_ORDER,
 } from "../actions/types";
 
 // Define an initial global state for the app
@@ -252,6 +253,15 @@ export default function reducer(state = initialState, action) {
 		// If the action type is RESET_STATE, return the initial state
 		case RESET_STATE:
 			return initialState;
+		// If the action type is RESET_FILTERS_AND_ORDER, return the new state with the dogs array updated
+		case RESET_FILTERS_AND_ORDER:
+			return {
+				...state,
+				currentFilterByTemperament: "default",
+				currentFilterByCreated: "default",
+				currentOrderByWeight: "default",
+				currentOrderByName: "default",
+			};
 
 		default:
 			return state;

@@ -1,10 +1,31 @@
 import styles from "./DogCard.module.css";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+	setCurrentPageGlobal,
+	setCurrentFilterByCreated,
+	setCurrentFilterByTemperament,
+	setCurrentOrderByWeight,
+	setCurrentOrderByName,
+	filterDogsByTemperamentAndCreated,
+} from "../../redux/actions/actions";
 
 export default function DogCard(props) {
 	const { id, name, image, temperament, weightMin, weightMax } = props.dog;
 
 	const weightAvg = (parseInt(weightMin) + parseInt(weightMax)) / 2;
+
+	const dispatch = useDispatch();
+
+	const handleFilterTemp = (e) => {
+		e.preventDefault();
+		dispatch(setCurrentPageGlobal(1));
+		dispatch(setCurrentFilterByCreated("default"));
+		dispatch(setCurrentFilterByTemperament(e.target.innerText));
+		dispatch(filterDogsByTemperamentAndCreated(e.target.innerText, "default"));
+		dispatch(setCurrentOrderByWeight("default"));
+		dispatch(setCurrentOrderByName("default"));
+	};
 
 	return (
 		<>
@@ -31,9 +52,21 @@ export default function DogCard(props) {
 									{temperament
 										.join(", ")
 										.split(", ")
+										.slice(0, 8)
 										.map((temp) => (
-											<p className={styles.temperament}>{temp}</p>
+											<p
+												key={temp}
+												className={styles.temperament}
+												onClick={handleFilterTemp}
+											>
+												{temp}
+											</p>
 										))}
+									{temperament.length > 8 && (
+										<Link to={`/dogs/${id}`} className={styles.temperament}>
+											...
+										</Link>
+									)}
 								</div>
 							)
 						)}
