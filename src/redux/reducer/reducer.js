@@ -73,16 +73,20 @@ export default function reducer(state = initialState, action) {
 			// Define a new array with the dogs filtered
 			const filteredDogs = [];
 			if (
-				action.payload.tempers === "any" &&
-				action.payload.created === "any"
+				(action.payload.tempers === "any" ||
+					action.payload.tempers === "default") &&
+				(action.payload.created === "any" ||
+					action.payload.created === "default")
 			) {
 				return {
 					...state,
 					dogs: allDogs,
 				};
 			} else if (
-				action.payload.tempers === "any" &&
-				action.payload.created !== "any"
+				(action.payload.tempers === "any" ||
+					action.payload.tempers === "default") &&
+				action.payload.created !== "any" &&
+				action.payload.created !== "default"
 			) {
 				allDogs.forEach((dog) => {
 					if (action.payload.created === "created") {
@@ -97,7 +101,9 @@ export default function reducer(state = initialState, action) {
 				});
 			} else if (
 				action.payload.tempers !== "any" &&
-				action.payload.created === "any"
+				action.payload.tempers !== "default" &&
+				(action.payload.created === "any" ||
+					action.payload.created === "default")
 			) {
 				allDogs.forEach((dog) => {
 					if (dog.temperament?.includes(action.payload.tempers)) {
