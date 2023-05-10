@@ -97,3 +97,18 @@
 .dogInfo:hover > * {
 	transform: translateY(0px);
 }
+
+@media (max-width: 768px) {
+	.dogCard {
+		width: 350px;
+		height: 300px;
+	}
+	.dogCard img {
+		width: 350px;
+		height: 300px;
+	}
+	.dogInfo {
+		width: 350px;
+		height: 300px;
+	}
+}
