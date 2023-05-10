@@ -1,0 +1,45 @@
+.order {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.select {
+	border: 2px solid #e8a249;
+	border-radius: 9999px;
+	width: auto;
+	padding: 5px;
+	font-size: 15px;
+	outline: none;
+	margin: 5px;
+	background-color: #575e55;
+	color: #e8a249;
+	font-weight: 700;
+	text-align: center;
+}
+
+.select:focus {
+	outline: none;
+	background-color: #e8a249;
+	color: #575e55;
+}
+
+.select option {
+	background-color: #575e55;
+	color: #e8a249;
+	font-weight: 700;
+}
+
+.select option:hover {
+	background-color: #e8a249;
+	color: #575e55;
+}
+
+.title {
+	font-size: 1.3rem;
+	font-weight: 700;
+	color: #e8a249;
+	margin: 5px;
+	text-align: center;
+}

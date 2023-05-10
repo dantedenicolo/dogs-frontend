@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Home, Landing } from "./pages";
+import { Home, Landing, Detail, Create } from "./pages";
 import { Nav } from "./components";
 import { useIsNavigationRoute } from "./hooks";
 
@@ -11,6 +11,8 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Landing />} />
 				<Route path="/home" element={<Home />} />
+				<Route path="/dogs/:id" element={<Detail />} />
+				<Route path="/create" element={<Create />} />
 			</Routes>
 		</div>
 	);

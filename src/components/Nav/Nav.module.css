@@ -9,6 +9,11 @@
 	width: 50px;
 }
 
+.logo:hover {
+	cursor: pointer;
+	transform: scale(1.02);
+}
+
 .navLinks {
 	display: flex;
 	flex-direction: row;
@@ -44,18 +49,7 @@
 
 .leave:hover {
 	background-color: rgb(142, 46, 46);
+	color: #fff !important;
 	cursor: pointer;
 	transform: scale(1.02);
-}
-
-.leave a {
-	text-decoration: none;
-	color: #fff;
-	font-size: 16px;
-	font-weight: bold;
-	transition: all 0.3s ease-in-out;
-}
-
-.leave a:hover {
-	color: #fff !important;
 }

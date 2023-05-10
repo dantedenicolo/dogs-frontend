@@ -1,0 +1,99 @@
+/* make a responsive card */
+.dogCard img {
+	width: 450px;
+	height: 400px;
+	object-fit: cover;
+	border-radius: 10px 10px;
+}
+.dogCard {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 450px;
+	height: 400px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+	transition: all 0.3s ease-in-out;
+	margin: 10px;
+	position: relative;
+}
+
+.dogInfo {
+	position: absolute;
+	top: 0px;
+	left: 0;
+	width: 450px;
+	height: 400px;
+	border-radius: 10px;
+	backdrop-filter: blur(5px);
+	background-color: rgba(0, 0, 0, 0.5);
+	color: #ffffff;
+	font-family: "Quicksand", sans-serif;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	transition: opacity 0.25s;
+}
+
+.temperaments {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+.temperament {
+	font-size: 0.9rem;
+	font-weight: 700;
+	margin: 5px;
+	padding: 5px 10px;
+	border-radius: 5px;
+	background-color: #ced89d;
+	color: #000;
+}
+
+.dogInfo h3 {
+	font-size: 1.6rem;
+	font-weight: 700;
+	margin-bottom: 0px;
+	color: #000;
+	background-color: #e8a249;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+
+.dogInfo h4 {
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin-top: 15px;
+	margin-bottom: 0px;
+	color: #e8a249;
+}
+
+.dogInfo .weight {
+	font-size: 1.2rem;
+	font-weight: 700;
+	margin-top: 5px;
+	margin-bottom: 0px;
+	color: #fff;
+}
+
+.dogInfo > * {
+	transform: translateY(20px);
+	transition: transform 0.25s;
+}
+
+.dogInfo:hover {
+	opacity: 1;
+	cursor: pointer;
+}
+
+.dogInfo:hover > * {
+	transform: translateY(0px);
+}

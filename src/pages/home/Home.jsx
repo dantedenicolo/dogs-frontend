@@ -1,9 +1,16 @@
-import { Nav } from "../../components";
+import styles from "./Home.module.css";
+import {
+	DogsContainer,
+	OrdersAndFiltersSection,
+	SearchBar,
+} from "../../components";
 
 export default function Home() {
 	return (
 		<div>
-			<h1>Home</h1>
+			<SearchBar />
+			<OrdersAndFiltersSection />
+			<DogsContainer />
 		</div>
 	);
 }
