@@ -8,6 +8,7 @@ import { useValidate } from "../../hooks";
 import { useParams } from "react-router-dom";
 import { LoaderComponent } from "../../components";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../utils/constants";
 
 export default function Update() {
 	const { id } = useParams();
@@ -16,7 +17,7 @@ export default function Update() {
 	const [temperaments, setTemperaments] = useState([]);
 
 	useEffect(() => {
-		fetch(`http://localhost:3001/temperaments`)
+		fetch(`${BACKEND_URL}/temperaments`)
 			.then((res) => res.json())
 			.then((data) => {
 				setTemperaments(data);
@@ -25,7 +26,7 @@ export default function Update() {
 
 	useEffect(() => {
 		if (temperaments.length) {
-			fetch(`http://localhost:3001/dogs/${id}`)
+			fetch(`${BACKEND_URL}/dogs/${id}`)
 				.then((res) => res.json())
 				.then((data) => {
 					if (!data.id) {

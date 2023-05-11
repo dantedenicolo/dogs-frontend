@@ -43,10 +43,20 @@ export default function DogCard(props) {
 	const handleDeleteDog = (e) => {
 		e.preventDefault();
 		if (window.confirm("Are you sure you want to delete this dog?")) {
-			dispatch(deleteDog(id));
-			dispatch(getDogs()).then(() => {
-				if (currentSearch !== "") {
-					dispatch(getDogByName(currentSearch)).then(() => {
+			dispatch(deleteDog(id)).then(() => {
+				dispatch(getDogs()).then(() => {
+					if (currentSearch !== "") {
+						dispatch(getDogByName(currentSearch)).then(() => {
+							dispatch(
+								filterDogsByTemperamentAndCreated(
+									filterByTemperament,
+									filterByCreated
+								)
+							);
+							dispatch(orderDogsByWeight(orderByWeight));
+							dispatch(orderDogsByName(orderByName));
+						});
+					} else {
 						dispatch(
 							filterDogsByTemperamentAndCreated(
 								filterByTemperament,
@@ -55,17 +65,8 @@ export default function DogCard(props) {
 						);
 						dispatch(orderDogsByWeight(orderByWeight));
 						dispatch(orderDogsByName(orderByName));
-					});
-				} else {
-					dispatch(
-						filterDogsByTemperamentAndCreated(
-							filterByTemperament,
-							filterByCreated
-						)
-					);
-					dispatch(orderDogsByWeight(orderByWeight));
-					dispatch(orderDogsByName(orderByName));
-				}
+					}
+				});
 			});
 		} else {
 			return;
