@@ -360,9 +360,9 @@ export default function Create() {
 							)}
 						</div>
 						<div className={styles.inputContainer}>
-							<p className={styles.label}>Imagen:</p>
+							<p className={styles.label}>Image:</p>
 							<label htmlFor="image" className={styles.labelImg}>
-								Subir imagen
+								Uplaod image
 							</label>
 							<input
 								type="file"

@@ -234,19 +234,21 @@ export default function Update() {
 	const handleDelete = (e) => {
 		e.preventDefault();
 		setSelectedTemperaments(
-			selectedTemperaments.filter((temp) => temp.id !== Number(e.target.id))
+			selectedTemperaments.filter(
+				(temp) => Number(temp.id) !== Number(e.target.id)
+			)
 		);
 		setInput({
 			...input,
 			temperament: input.temperament.filter(
-				(temperament) => temperament !== Number(e.target.id)
+				(temperament) => Number(temperament) !== Number(e.target.id)
 			),
 		});
 		setErrors(
 			useValidate({
 				...input,
 				temperament: input.temperament.filter(
-					(temperament) => temperament !== Number(e.target.id)
+					(temperament) => Number(temperament) !== Number(e.target.id)
 				),
 			})
 		);
@@ -395,9 +397,9 @@ export default function Update() {
 								)}
 							</div>
 							<div className={styles.inputContainer}>
-								<p className={styles.label}>Imagen:</p>
+								<p className={styles.label}>Image:</p>
 								<label htmlFor="image" className={styles.labelImg}>
-									Subir imagen
+									Upload image
 								</label>
 								<input
 									type="file"
