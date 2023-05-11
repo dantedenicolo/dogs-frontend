@@ -28,6 +28,12 @@ export default function Detail() {
 		};
 	}, [dispatch, id]);
 
+	useEffect(() => {
+		if (dog[0] === "No dogs found") {
+			window.location.replace("/notfound");
+		}
+	}, [dog]);
+
 	const {
 		name,
 		image,

@@ -1,3 +1,4 @@
 import useIsNavigationRoute from "./useIsNavigationRoute";
+import useValidate from "./useValidate";
 
-export { useIsNavigationRoute };
+export { useIsNavigationRoute, useValidate };

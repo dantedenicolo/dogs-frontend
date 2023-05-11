@@ -1,9 +1,19 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createDog, getTemperaments } from "../../redux/actions/actions";
+import {
+	createDog,
+	getTemperaments,
+	getDogs,
+	filterDogsByTemperamentAndCreated,
+	orderDogsByWeight,
+	orderDogsByName,
+	getDogByName,
+} from "../../redux/actions/actions";
 import styles from "./Create.module.css";
 import { uploadImage } from "../../firebase/client";
 import imageCompression from "browser-image-compression";
+import { useValidate } from "../../hooks";
+import { Link } from "react-router-dom";
 
 export default function Create() {
 	const dispatch = useDispatch();
@@ -16,6 +26,13 @@ export default function Create() {
 		return 0;
 	});
 	const [imageURL, setImageURL] = useState(null);
+	const filterByCreated = useSelector((state) => state.currentFilterByCreated);
+	const filterByTemperament = useSelector(
+		(state) => state.currentFilterByTemperament
+	);
+	const orderByWeight = useSelector((state) => state.currentOrderByWeight);
+	const orderByName = useSelector((state) => state.currentOrderByName);
+	const currentSearch = useSelector((state) => state.currentSearch);
 
 	const [input, setInput] = useState({
 		name: "",
@@ -31,59 +48,6 @@ export default function Create() {
 	useEffect(() => {
 		dispatch(getTemperaments());
 	}, [dispatch]);
-
-	const validate = (input) => {
-		let errors = {};
-		if (!input.name.trim()) {
-			errors.name = "Name is required";
-		} else if (!/^[a-zA-Z\s]*$/.test(input.name)) {
-			errors.name = "Name is invalid";
-		} else if (input.name.length < 3 || input.name.length > 50) {
-			errors.name = "Name must be between 3 and 50 characters";
-		}
-		if (!input.heightMin.trim()) {
-			errors.heightMin = "Height is required";
-		} else if (!/^[0-9]*$/.test(input.heightMin)) {
-			errors.heightMin = "Height is invalid";
-		} else if (Number(input.heightMin) < 1 || Number(input.heightMin) > 129) {
-			errors.heightMin = "Height must be between 1 and 129";
-		}
-		if (!input.heightMax.trim()) {
-			errors.heightMax = "Height is required";
-		} else if (!/^[0-9]*$/.test(input.heightMax)) {
-			errors.heightMax = "Height is invalid";
-		} else if (Number(input.heightMax) < 1 || Number(input.heightMax) > 129) {
-			errors.heightMax = "Height must be between 1 and 129";
-		} else if (Number(input.heightMin) > Number(input.heightMax)) {
-			errors.heightMax = "Max height must be greater than min height";
-		}
-		if (!input.weightMin.trim()) {
-			errors.weightMin = "Weight is required";
-		} else if (!/^[0-9]*$/.test(input.weightMin)) {
-			errors.weightMin = "Weight is invalid";
-		} else if (Number(input.weightMin) < 1 || Number(input.weightMin) > 199) {
-			errors.weightMin = "Weight must be between 1 and 199";
-		}
-		if (!input.weightMax.trim()) {
-			errors.weightMax = "Weight is required";
-		} else if (!/^[0-9]*$/.test(input.weightMax)) {
-			errors.weightMax = "Weight is invalid";
-		} else if (Number(input.weightMax) < 1 || Number(input.weightMax) > 199) {
-			errors.weightMax = "Weight must be between 1 and 199";
-		} else if (Number(input.weightMin) > Number(input.weightMax)) {
-			errors.weightMax = "Max weight must be greater than min weight";
-		}
-		if (!input.life_span.trim()) {
-			errors.life_span = "Life span is required";
-		} else if (!/^[0-9]*$/.test(input.life_span)) {
-			errors.life_span = "Life span is invalid";
-		} else if (Number(input.life_span) < 1 || Number(input.life_span) > 35) {
-			errors.life_span = "Life span must be between 1 and 35";
-		} else if (input.temperament.length === 0) {
-			errors.temperament = "Al least one temperament is required";
-		}
-		return errors;
-	};
 
 	const [errors, setErrors] = useState({ initial: "initial" });
 
@@ -101,7 +65,7 @@ export default function Create() {
 			[e.target.name]: e.target.value,
 		});
 		setErrors(
-			validate({
+			useValidate({
 				...input,
 				[e.target.name]: e.target.value,
 			})
@@ -109,20 +73,31 @@ export default function Create() {
 	};
 
 	const handleSelectChange = (e) => {
+		if (
+			input.temperament.includes(e.target.value) ||
+			selectedTemperaments.some((temp) => temp.id === e.target.value)
+		) {
+			e.target.selectedIndex = 0;
+			return alert("This temperament is already selected");
+		}
 		setInput({
 			...input,
 			temperament: [...input.temperament, e.target.value],
 		});
 		setSelectedTemperaments([
 			...selectedTemperaments,
-			e.target.options[e.target.selectedIndex].getAttribute("tempname"),
+			{
+				name: e.target.options[e.target.selectedIndex].getAttribute("tempname"),
+				id: e.target.value,
+			},
 		]);
 		setErrors(
-			validate({
+			useValidate({
 				...input,
 				[e.target.name]: e.target.value,
 			})
 		);
+		e.target.selectedIndex = 0;
 	};
 
 	const handleSubmit = (e) => {
@@ -146,6 +121,19 @@ export default function Create() {
 				setSelectedTemperaments([]);
 				const tempselect = document.getElementById("temperament");
 				tempselect.selectedIndex = 0;
+				setImageURL(null);
+				dispatch(getDogs()).then(() => {
+					dispatch(getDogByName(currentSearch)).then(() => {
+						dispatch(
+							filterDogsByTemperamentAndCreated(
+								filterByTemperament,
+								filterByCreated
+							)
+						);
+						dispatch(orderDogsByWeight(orderByWeight));
+						dispatch(orderDogsByName(orderByName));
+					});
+				});
 			});
 		} else {
 			alert("Please, check the form for errors.");
@@ -203,6 +191,29 @@ export default function Create() {
 		} catch (error) {
 			console.log(error);
 		}
+	};
+
+	const handleDelete = (e) => {
+		e.preventDefault();
+		setSelectedTemperaments(
+			selectedTemperaments.filter(
+				(temperament) => temperament.id !== e.target.id
+			)
+		);
+		setInput({
+			...input,
+			temperament: input.temperament.filter(
+				(temperament) => temperament !== e.target.id
+			),
+		});
+		setErrors(
+			useValidate({
+				...input,
+				temperament: input.temperament.filter(
+					(temperament) => temperament !== e.target.id
+				),
+			})
+		);
 	};
 
 	return (
@@ -400,7 +411,18 @@ export default function Create() {
 						<div className={styles.temperaments}>
 							{selectedTemperaments &&
 								selectedTemperaments.map((temp) => (
-									<p className={styles.temperament}>{temp}</p>
+									<>
+										<p className={styles.temperament}>
+											{temp.name}{" "}
+											<span
+												className={styles.delete}
+												onClick={handleDelete}
+												id={temp.id}
+											>
+												X
+											</span>
+										</p>
+									</>
 								))}
 						</div>
 						<input

@@ -16,6 +16,8 @@ import {
 	SET_CURRENT_SEARCH,
 	RESET_STATE,
 	RESET_FILTERS_AND_ORDER,
+	UPDATE_DOG,
+	DELETE_DOG,
 } from "../actions/types";
 
 // Define an initial global state for the app
@@ -261,6 +263,16 @@ export default function reducer(state = initialState, action) {
 				currentFilterByCreated: "default",
 				currentOrderByWeight: "default",
 				currentOrderByName: "default",
+			};
+		// If the action type is UPDATE_DOG, just return the state
+		case UPDATE_DOG:
+			return {
+				...state,
+			};
+		// If the action type is DELETE_DOG, just return the state
+		case DELETE_DOG:
+			return {
+				...state,
 			};
 
 		default:

@@ -19,6 +19,8 @@ import {
 	SET_CURRENT_SEARCH,
 	RESET_STATE,
 	RESET_FILTERS_AND_ORDER,
+	UPDATE_DOG,
+	DELETE_DOG,
 } from "./types";
 
 export const getDogs = () => async (dispatch) => {
@@ -75,7 +77,10 @@ export const getDogDetails = (id) => async (dispatch) => {
 			payload: response.data,
 		});
 	} catch (error) {
-		console.log(error);
+		dispatch({
+			type: GET_DOG_DETAILS,
+			payload: ["No dogs found"],
+		});
 	}
 };
 
@@ -126,7 +131,6 @@ export const cleanState = () => (dispatch) => {
 
 export const setCurrentPageGlobal = (page) => (dispatch) => {
 	// Dispatch the action
-	console.log(page);
 	dispatch({
 		type: SET_CURRENT_PAGE,
 		payload: page,
@@ -185,4 +189,32 @@ export const resetFiltersAndOrder = () => (dispatch) => {
 	dispatch({
 		type: RESET_FILTERS_AND_ORDER,
 	});
+};
+
+export const updateDog = (dog) => async (dispatch) => {
+	try {
+		// PUT request to the server
+		const response = await axios.put(`${BACKEND_URL}/dogs/${dog.id}`, dog);
+		// Dispatch the action with the response data
+		dispatch({
+			type: UPDATE_DOG,
+			payload: response.data,
+		});
+	} catch (error) {
+		return { error: true, message: error.response.data.message };
+	}
+};
+
+export const deleteDog = (id) => async (dispatch) => {
+	try {
+		// DELETE request to the server
+		await axios.delete(`${BACKEND_URL}/dogs/${id}`);
+		// Dispatch the action with the response data
+		dispatch({
+			type: DELETE_DOG,
+			payload: id,
+		});
+	} catch (error) {
+		return { error: true, message: error.response.data.message };
+	}
 };

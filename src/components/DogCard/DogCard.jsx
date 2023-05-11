@@ -1,21 +1,34 @@
 import styles from "./DogCard.module.css";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	setCurrentPageGlobal,
 	setCurrentFilterByCreated,
 	setCurrentFilterByTemperament,
 	setCurrentOrderByWeight,
 	setCurrentOrderByName,
+	orderDogsByName,
+	orderDogsByWeight,
 	filterDogsByTemperamentAndCreated,
+	deleteDog,
+	getDogs,
+	getDogByName,
 } from "../../redux/actions/actions";
 
 export default function DogCard(props) {
-	const { id, name, image, temperament, weightMin, weightMax } = props.dog;
+	const { id, name, image, temperament, weightMin, weightMax, createdInDb } =
+		props.dog;
 
 	const weightAvg = (parseInt(weightMin) + parseInt(weightMax)) / 2;
 
 	const dispatch = useDispatch();
+	const filterByCreated = useSelector((state) => state.currentFilterByCreated);
+	const filterByTemperament = useSelector(
+		(state) => state.currentFilterByTemperament
+	);
+	const orderByWeight = useSelector((state) => state.currentOrderByWeight);
+	const orderByName = useSelector((state) => state.currentOrderByName);
+	const currentSearch = useSelector((state) => state.currentSearch);
 
 	const handleFilterTemp = (e) => {
 		e.preventDefault();
@@ -25,6 +38,38 @@ export default function DogCard(props) {
 		dispatch(filterDogsByTemperamentAndCreated(e.target.innerText, "default"));
 		dispatch(setCurrentOrderByWeight("default"));
 		dispatch(setCurrentOrderByName("default"));
+	};
+
+	const handleDeleteDog = (e) => {
+		e.preventDefault();
+		if (window.confirm("Are you sure you want to delete this dog?")) {
+			dispatch(deleteDog(id));
+			dispatch(getDogs()).then(() => {
+				if (currentSearch !== "") {
+					dispatch(getDogByName(currentSearch)).then(() => {
+						dispatch(
+							filterDogsByTemperamentAndCreated(
+								filterByTemperament,
+								filterByCreated
+							)
+						);
+						dispatch(orderDogsByWeight(orderByWeight));
+						dispatch(orderDogsByName(orderByName));
+					});
+				} else {
+					dispatch(
+						filterDogsByTemperamentAndCreated(
+							filterByTemperament,
+							filterByCreated
+						)
+					);
+					dispatch(orderDogsByWeight(orderByWeight));
+					dispatch(orderDogsByName(orderByName));
+				}
+			});
+		} else {
+			return;
+		}
 	};
 
 	return (
@@ -72,6 +117,16 @@ export default function DogCard(props) {
 						)}
 						<h4>Weight Average:</h4>
 						<p className={styles.weight}>{weightAvg} kg</p>
+						{createdInDb && (
+							<div className={styles.createdInDbContainer}>
+								<Link to={`/update/${id}`} className={styles.edit}>
+									Edit
+								</Link>
+								<button className={styles.delete} onClick={handleDeleteDog}>
+									Delete
+								</button>
+							</div>
+						)}
 					</div>
 				</div>
 			</Link>

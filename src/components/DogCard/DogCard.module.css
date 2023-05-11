@@ -106,6 +106,54 @@
 	transform: translateY(0px);
 }
 
+.createdInDbContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+.delete {
+	padding: 5px 10px;
+	border-radius: 9999px;
+	border: 2px solid rgb(240, 84, 84);
+	background-color: rgb(240, 84, 84);
+	transition: background-color 0.25s, color 0.25s, border 0.25s;
+	color: #fff;
+	font-size: 0.9rem;
+	font-weight: 700;
+	cursor: pointer;
+	margin: 3px;
+}
+
+.delete:hover {
+	background-color: rgb(142, 46, 46);
+	border: 2px solid rgb(142, 46, 46);
+	color: #fff !important;
+}
+
+.edit {
+	padding: 5px 10px;
+	border-radius: 9999px;
+	border: 2px solid #e8a249;
+	background-color: #e8a249;
+	transition: background-color 0.25s, color 0.25s, border 0.25s;
+	color: #575e55;
+	font-size: 0.9rem;
+	font-weight: 700;
+	cursor: pointer;
+	text-decoration: none;
+	margin: 3px;
+}
+
+.edit:hover {
+	background-color: #ae6d18;
+	border: 2px solid #ae6d18;
+	color: #fff;
+}
+
 @media (max-width: 768px) {
 	.dogCard {
 		width: 350px;
