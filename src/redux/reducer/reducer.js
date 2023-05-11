@@ -176,8 +176,14 @@ export default function reducer(state = initialState, action) {
 		case ORDER_DOGS_BY_WEIGHT:
 			// Define a new array with all the dogs
 			const allDogsByWeight = [...state.dogs];
+			const weightMin = (dog) => {
+				return Number(dog.weightMin) || 0;
+			};
+			const weightMax = (dog) => {
+				return Number(dog.weightMax) || 0;
+			};
 			const weightAvg = (dog) => {
-				return (parseInt(dog.weightMin) + parseInt(dog.weightMax)) / 2;
+				return (weightMin(dog) + weightMax(dog)) / 2;
 			};
 
 			if (action.payload === "any") {

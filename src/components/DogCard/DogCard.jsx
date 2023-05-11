@@ -19,7 +19,9 @@ export default function DogCard(props) {
 	const { id, name, image, temperament, weightMin, weightMax, createdInDb } =
 		props.dog;
 
-	const weightAvg = (parseInt(weightMin) + parseInt(weightMax)) / 2;
+	const weightMinNum = Number(weightMin) || 0;
+	const weightMaxNum = Number(weightMax) || 0;
+	const weightAvg = (weightMinNum + weightMaxNum) / 2;
 
 	const dispatch = useDispatch();
 	const filterByCreated = useSelector((state) => state.currentFilterByCreated);
