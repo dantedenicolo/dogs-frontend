@@ -6,6 +6,8 @@ import {
 	setCurrentPageGlobal,
 	setCurrentFilterByCreated,
 	setCurrentFilterByTemperament,
+	orderDogsByName,
+	orderDogsByWeight,
 } from "../../redux/actions/actions";
 import styles from "./Filter.module.css";
 
@@ -24,6 +26,8 @@ export default function Filter() {
 		currentFilterByCreated
 	);
 	const temperaments = useSelector((state) => state.temperaments);
+	const orderByWeight = useSelector((state) => state.currentOrderByWeight);
+	const orderByName = useSelector((state) => state.currentOrderByName);
 
 	useEffect(() => {
 		dispatch(getTemperaments());
@@ -42,6 +46,8 @@ export default function Filter() {
 		);
 		dispatch(setCurrentPageGlobal(1));
 		dispatch(setCurrentFilterByTemperament(e.target.value));
+		dispatch(orderDogsByWeight(orderByWeight));
+		dispatch(orderDogsByName(orderByName));
 	};
 
 	const handleFilterByCreated = (e) => {
@@ -51,6 +57,8 @@ export default function Filter() {
 		);
 		dispatch(setCurrentPageGlobal(1));
 		dispatch(setCurrentFilterByCreated(e.target.value));
+		dispatch(orderDogsByWeight(orderByWeight));
+		dispatch(orderDogsByName(orderByName));
 	};
 
 	return (

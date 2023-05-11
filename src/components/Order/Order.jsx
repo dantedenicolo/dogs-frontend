@@ -18,12 +18,14 @@ export default function Order() {
 		window.history.replaceState(null, null, window.location.pathname);
 		dispatch(orderDogsByName(e.target.value));
 		dispatch(setCurrentOrderByName(e.target.value));
+		dispatch(setCurrentOrderByWeight(currentOrderByWeight));
 	};
 
 	const handleOrderByWeight = (e) => {
 		window.history.replaceState(null, null, window.location.pathname);
 		dispatch(orderDogsByWeight(e.target.value));
 		dispatch(setCurrentOrderByWeight(e.target.value));
+		dispatch(setCurrentOrderByName(currentOrderByName));
 	};
 
 	return (

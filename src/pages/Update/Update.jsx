@@ -1,20 +1,35 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateDog } from "../../redux/actions/actions";
+import {
+	updateDog,
+	getDogByName,
+	setCurrentSearch,
+	filterDogsByTemperamentAndCreated,
+	orderDogsByWeight,
+	orderDogsByName,
+} from "../../redux/actions/actions";
 import styles from "./Update.module.css";
 import { uploadImage } from "../../firebase/client";
 import imageCompression from "browser-image-compression";
 import { useValidate } from "../../hooks";
 import { useParams } from "react-router-dom";
 import { LoaderComponent } from "../../components";
-import { Link } from "react-router-dom";
 import { BACKEND_URL } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 export default function Update() {
 	const { id } = useParams();
 	const dispatch = useDispatch();
 	const [dog, setDog] = useState({});
 	const [temperaments, setTemperaments] = useState([]);
+	const navigate = useNavigate();
+	const currentSearch = useSelector((state) => state.currentSearch);
+	const filterByTemperament = useSelector(
+		(state) => state.currentFilterByTemperament
+	);
+	const filterByCreated = useSelector((state) => state.currentFilterByCreated);
+	const orderByWeight = useSelector((state) => state.currentOrderByWeight);
+	const orderByName = useSelector((state) => state.currentOrderByName);
 
 	useEffect(() => {
 		fetch(`${BACKEND_URL}/temperaments`)
@@ -112,8 +127,8 @@ export default function Update() {
 
 	const handleSelectChange = (e) => {
 		if (
-			input.temperament.includes(e.target.value) ||
-			selectedTemperaments.some((temp) => temp.id === e.target.value)
+			input.temperament.includes(Number(e.target.value)) ||
+			selectedTemperaments.some((temp) => temp.id === Number(e.target.value))
 		) {
 			e.target.selectedIndex = 0;
 			return alert("This temperament is already selected");
@@ -146,7 +161,18 @@ export default function Update() {
 					return alert("Error updating dog: " + res.message);
 				}
 				alert("Dog updated successfully!");
-				window.location.replace("/home");
+				dispatch(getDogByName(currentSearch)).then(() => {
+					dispatch(
+						filterDogsByTemperamentAndCreated(
+							filterByTemperament,
+							filterByCreated
+						)
+					);
+					dispatch(orderDogsByWeight(orderByWeight));
+					dispatch(orderDogsByName(orderByName));
+					dispatch(setCurrentSearch(currentSearch));
+					navigate("/home");
+				});
 			});
 		} else {
 			alert("Please, check the form for errors.");

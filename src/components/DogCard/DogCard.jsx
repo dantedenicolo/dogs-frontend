@@ -3,10 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	setCurrentPageGlobal,
-	setCurrentFilterByCreated,
 	setCurrentFilterByTemperament,
-	setCurrentOrderByWeight,
-	setCurrentOrderByName,
 	orderDogsByName,
 	orderDogsByWeight,
 	filterDogsByTemperamentAndCreated,
@@ -35,11 +32,12 @@ export default function DogCard(props) {
 	const handleFilterTemp = (e) => {
 		e.preventDefault();
 		dispatch(setCurrentPageGlobal(1));
-		dispatch(setCurrentFilterByCreated("default"));
 		dispatch(setCurrentFilterByTemperament(e.target.innerText));
-		dispatch(filterDogsByTemperamentAndCreated(e.target.innerText, "default"));
-		dispatch(setCurrentOrderByWeight("default"));
-		dispatch(setCurrentOrderByName("default"));
+		dispatch(
+			filterDogsByTemperamentAndCreated(e.target.innerText, filterByCreated)
+		);
+		dispatch(orderDogsByWeight(orderByWeight));
+		dispatch(orderDogsByName(orderByName));
 	};
 
 	const handleDeleteDog = (e) => {

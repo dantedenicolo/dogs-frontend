@@ -13,13 +13,14 @@ import styles from "./Create.module.css";
 import { uploadImage } from "../../firebase/client";
 import imageCompression from "browser-image-compression";
 import { useValidate } from "../../hooks";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Create() {
 	const dispatch = useDispatch();
 	const temperaments = useSelector((state) => state.temperaments);
 	const [selectedTemperaments, setSelectedTemperaments] = useState([]);
 	const [isDisabled, setIsDisabled] = useState(true);
+	const navigate = useNavigate();
 	temperaments.sort((a, b) => {
 		if (a.name > b.name) return 1;
 		if (a.name < b.name) return -1;
@@ -132,6 +133,7 @@ export default function Create() {
 						);
 						dispatch(orderDogsByWeight(orderByWeight));
 						dispatch(orderDogsByName(orderByName));
+						navigate("/home");
 					});
 				});
 			});

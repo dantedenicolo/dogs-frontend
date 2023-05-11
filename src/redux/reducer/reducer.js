@@ -143,7 +143,7 @@ export default function reducer(state = initialState, action) {
 			// Define a new array with all the dogs
 			const allDogsByName = [...state.dogs];
 
-			if (action.payload === "any") {
+			if (action.payload === "any" || action.payload === "default") {
 				return {
 					...state,
 					dogs: allDogsByName,
@@ -186,7 +186,7 @@ export default function reducer(state = initialState, action) {
 				return (weightMin(dog) + weightMax(dog)) / 2;
 			};
 
-			if (action.payload === "any") {
+			if (action.payload === "any" || action.payload === "default") {
 				return {
 					...state,
 					dogs: allDogsByWeight,
