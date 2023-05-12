@@ -1,23 +1,48 @@
 import styles from "./Form.module.css";
 import { useState, useEffect } from "react";
 import { useValidate } from "../../hooks";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	createDog,
+	updateDog,
+	getDogByName,
+	filterDogsByTemperamentAndCreated,
+	orderDogsByWeight,
+	orderDogsByName,
+	setCurrentSearch,
+	getTemperaments,
+} from "../../redux/actions/actions";
 import imageCompression from "browser-image-compression";
 import { uploadImage } from "../../firebase/client";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Form({
-	handleSubmit,
 	selectedTemperaments,
 	temperaments,
 	image,
 	input,
 	setInput,
 	setSelectedTemperaments,
-	errors,
-	setErrors,
-	formTitle,
+	type,
 }) {
 	// defining isDisabled state with initial value so that the form is disabled at first
 	const [isDisabled, setIsDisabled] = useState(true);
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	// getting current search, filters and orders from redux store
+	const currentSearch = useSelector((state) => state.currentSearch);
+	const filterByTemperament = useSelector(
+		(state) => state.currentFilterByTemperament
+	);
+	const filterByCreated = useSelector((state) => state.currentFilterByCreated);
+	const orderByWeight = useSelector((state) => state.currentOrderByWeight);
+	const orderByName = useSelector((state) => state.currentOrderByName);
+
+	// defining errors state with initial value so that the form is disabled at first
+	const [errors, setErrors] = useState({ initial: "initial" });
 
 	useEffect(() => {
 		// if there are no errors, enable the form
@@ -28,6 +53,11 @@ export default function Form({
 			setIsDisabled(true);
 		}
 	}, [errors]);
+
+	// getting temperaments from database
+	useEffect(() => {
+		dispatch(getTemperaments());
+	}, [dispatch]);
 
 	// defining imageURL state
 	const [imageURL, setImageURL] = useState(image);
@@ -168,6 +198,51 @@ export default function Form({
 			})
 		);
 	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		// if there are no errors, update dog
+		if (Object.keys(errors).length === 0) {
+			dispatch(type === "create" ? createDog(input) : updateDog(input)).then(
+				(res) => {
+					if (res && res.error) {
+						// if there is an error from the server, alert it
+						return alert(
+							(type === "create"
+								? "Error creating dog"
+								: "Error updating dog") +
+								": " +
+								res.message
+						);
+					}
+					// if there is no error, alert success
+					alert(
+						type === "create"
+							? "Dog created successfully!"
+							: "Dog updated successfully!"
+					);
+					// dispatch current search, filters and orders to update home page
+					dispatch(getDogByName(currentSearch)).then(() => {
+						dispatch(
+							filterDogsByTemperamentAndCreated(
+								filterByTemperament,
+								filterByCreated
+							)
+						);
+						dispatch(orderDogsByWeight(orderByWeight));
+						dispatch(orderDogsByName(orderByName));
+						dispatch(setCurrentSearch(currentSearch));
+						// navigate to home page
+						navigate("/home");
+					});
+				}
+			);
+		} else {
+			// if there are errors, alert it
+			alert("Please, check the form for errors.");
+		}
+	};
+
 	return (
 		<form onSubmit={handleSubmit}>
 			<div className={styles.form}>
@@ -377,10 +452,13 @@ export default function Form({
 				</div>
 				<input
 					type="submit"
-					value={formTitle}
+					value={type === "create" ? "Create" : "Update"}
 					className={styles.button}
 					disabled={isDisabled}
 				/>
+				<Link to="/home">
+					<button className={styles.back}>Back</button>
+				</Link>
 			</div>
 		</form>
 	);

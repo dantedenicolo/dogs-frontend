@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDogs } from "../../redux/actions/actions";
 import { DogCard, Pagination, LoaderComponent } from "../";
@@ -17,16 +17,9 @@ export default function DogsContainer() {
 		}
 	});
 	// get current page from redux store
-	const getCurrentPage = useSelector((state) => state.currentPage);
-	// define a local state for the current page and set it to the current page from redux store
-	const [currentPage, setCurrentPage] = useState(getCurrentPage);
-	// define a local state for the number of dogs per page and set it to 8 so just 8 dogs are shown per page
-	const [dogsPerPage] = useState(8);
-
-	useEffect(() => {
-		// when the current page from redux store changes, set the local state for the current page to the current page from redux store
-		setCurrentPage(getCurrentPage);
-	}, [getCurrentPage]);
+	const currentPage = useSelector((state) => state.currentPage);
+	// define how many dogs per page
+	const dogsPerPage = 8;
 
 	useEffect(() => {
 		// just dispatch getDogs() if dogs is empty
@@ -61,7 +54,6 @@ export default function DogsContainer() {
 						<Pagination
 							dogsPerPage={dogsPerPage}
 							totalDogs={dogs.length}
-							setCurrentPage={setCurrentPage}
 							currentPage={currentPage}
 						/>
 					</>

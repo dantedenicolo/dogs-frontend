@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 export default function Pagination({
 	totalDogs, // totalDogs is the total number of dogs
 	dogsPerPage, // dogsPerPage is the number of dogs per page
-	setCurrentPage, // setCurrentPage is a function that sets the current page
 	currentPage, // currentPage defines which page is currently active
 }) {
 	// pageNumbers is an array of numbers from 1 to the total number of pages
@@ -21,7 +20,6 @@ export default function Pagination({
 	const handlePrevious = () => {
 		// just works if currentPage is greater than 1
 		if (currentPage > 1) {
-			setCurrentPage(currentPage - 1);
 			const newCurrentPage = Number(currentPage) - 1;
 			// dispatch an action to update the current page in the redux store
 			dispatch(setCurrentPageGlobal(newCurrentPage));
@@ -32,7 +30,6 @@ export default function Pagination({
 	const handleNext = () => {
 		// just works if currentPage is less than the total number of pages
 		if (currentPage < pageNumbers.length) {
-			setCurrentPage(currentPage + 1);
 			const newCurrentPage = Number(currentPage) + 1;
 			// dispatch an action to update the current page in the redux store
 			dispatch(setCurrentPageGlobal(newCurrentPage));
@@ -41,9 +38,9 @@ export default function Pagination({
 
 	// handleSetCurrentPage is a function that sets the current page to the page that is passed as an argument
 	const handleSetCurrentPage = (number) => () => {
-		setCurrentPage(number);
+		const newCurrentPage = Number(number);
 		// dispatch an action to update the current page in the redux store
-		dispatch(setCurrentPageGlobal(number));
+		dispatch(setCurrentPageGlobal(newCurrentPage));
 	};
 
 	return (

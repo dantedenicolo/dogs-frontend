@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	getTemperaments,
@@ -14,19 +14,10 @@ import styles from "./Filter.module.css";
 export default function Filter() {
 	const dispatch = useDispatch();
 	// get current filters from redux store so that they persist when unmounting the component
-	const currentFilterByTemperament = useSelector(
+	const selectedTemperament = useSelector(
 		(state) => state.currentFilterByTemperament
 	);
-	const currentFilterByCreated = useSelector(
-		(state) => state.currentFilterByCreated
-	);
-	// set local state to current filters
-	const [selectedTemperament, setSelectedTemperament] = useState(
-		currentFilterByTemperament
-	);
-	const [selectedCreated, setSelectedCreated] = useState(
-		currentFilterByCreated
-	);
+	const selectedCreated = useSelector((state) => state.currentFilterByCreated);
 	// get all the temperaments from redux store
 	const temperaments = useSelector((state) => state.temperaments);
 	// get current orders from redux store so that they persist when unmounting the component
@@ -46,8 +37,6 @@ export default function Filter() {
 	});
 
 	const handleFilterByTemperament = (e) => {
-		// set local state to the selected temperament
-		setSelectedTemperament(e.target.value);
 		// dispatch an action to filter the dogs by the selected temperament and the current created filter
 		dispatch(
 			filterDogsByTemperamentAndCreated(e.target.value, selectedCreated)
@@ -62,8 +51,6 @@ export default function Filter() {
 	};
 
 	const handleFilterByCreated = (e) => {
-		// set local state to the selected created filter
-		setSelectedCreated(e.target.value);
 		// dispatch an action to filter the dogs by the current temperament filter and the selected created filter
 		dispatch(
 			filterDogsByTemperamentAndCreated(selectedTemperament, e.target.value)
@@ -90,7 +77,7 @@ export default function Filter() {
 					<option
 						value="any"
 						disabled
-						selected={currentFilterByTemperament === "default"}
+						selected={selectedTemperament === "default"}
 					>
 						Temperament
 					</option>
@@ -100,7 +87,7 @@ export default function Filter() {
 							<option
 								key={temperament.id}
 								value={temperament.name}
-								selected={currentFilterByTemperament === temperament.name}
+								selected={selectedTemperament === temperament.name}
 							>
 								{temperament.name}
 							</option>
@@ -112,23 +99,16 @@ export default function Filter() {
 					className={styles.select}
 					onChange={handleFilterByCreated}
 				>
-					<option
-						value="any"
-						disabled
-						selected={currentFilterByCreated === "default"}
-					>
+					<option value="any" disabled selected={selectedCreated === "default"}>
 						Created
 					</option>
-					<option value="any" selected={currentFilterByCreated === "any"}>
+					<option value="any" selected={selectedCreated === "any"}>
 						All
 					</option>
-					<option
-						value="created"
-						selected={currentFilterByCreated === "created"}
-					>
+					<option value="created" selected={selectedCreated === "created"}>
 						Created in DB
 					</option>
-					<option value="api" selected={currentFilterByCreated === "api"}>
+					<option value="api" selected={selectedCreated === "api"}>
 						API
 					</option>
 				</select>
