@@ -1,21 +1,27 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
 
+// define firebase config object
 const firebaseConfig = {
-	apiKey: "AIzaSyAcGT0VmQdjg5wu3pixJXpq8h2gvz6UZ24",
-	authDomain: "dogsbreeds-231d9.firebaseapp.com",
-	projectId: "dogsbreeds-231d9",
-	storageBucket: "dogsbreeds-231d9.appspot.com",
-	messagingSenderId: "676808227684",
-	appId: "1:676808227684:web:00ce1c18be7c7c1dbf1871",
-	measurementId: "G-0GNNNLNDSG",
+	apiKey: process.env.REACT_APP_API_KEY,
+	authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+	projectId: process.env.REACT_APP_PROJECT_ID,
+	storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+	messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+	appId: process.env.REACT_APP_APP_ID,
+	measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
+// initialize firebase app if not already initialized
 !firebase.apps.length && firebase.initializeApp(firebaseConfig);
 
 export const uploadImage = (file) => {
+	// create a random file name with the current timestamp + file name
 	const randomFileName = `${Date.now()}-${file.name}`;
+	// define where to store the file in firebase storage
 	const ref = firebase.storage().ref(`/images/${randomFileName}`);
+	// upload the file to the defined storage location
 	const task = ref.put(file);
+	// return the task object
 	return task;
 };

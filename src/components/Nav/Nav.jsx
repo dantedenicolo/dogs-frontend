@@ -8,6 +8,7 @@ export default function Nav() {
 	const dispatch = useDispatch();
 
 	const handleLeave = () => {
+		// when the user clicks on "Leave", reset the redux store
 		dispatch(resetState());
 	};
 

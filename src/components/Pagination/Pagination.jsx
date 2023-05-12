@@ -19,18 +19,22 @@ export default function Pagination({
 
 	// handlePrevious is a function that sets the current page to the previous page
 	const handlePrevious = () => {
+		// just works if currentPage is greater than 1
 		if (currentPage > 1) {
 			setCurrentPage(currentPage - 1);
 			const newCurrentPage = Number(currentPage) - 1;
+			// dispatch an action to update the current page in the redux store
 			dispatch(setCurrentPageGlobal(newCurrentPage));
 		}
 	};
 
 	// handleNext is a function that sets the current page to the next page
 	const handleNext = () => {
+		// just works if currentPage is less than the total number of pages
 		if (currentPage < pageNumbers.length) {
 			setCurrentPage(currentPage + 1);
 			const newCurrentPage = Number(currentPage) + 1;
+			// dispatch an action to update the current page in the redux store
 			dispatch(setCurrentPageGlobal(newCurrentPage));
 		}
 	};
@@ -38,12 +42,13 @@ export default function Pagination({
 	// handleSetCurrentPage is a function that sets the current page to the page that is passed as an argument
 	const handleSetCurrentPage = (number) => () => {
 		setCurrentPage(number);
+		// dispatch an action to update the current page in the redux store
 		dispatch(setCurrentPageGlobal(number));
 	};
 
 	return (
 		<div className={styles.pagination}>
-			{/* if currentPage is greater than 1, then show the previous button */}
+			{/* if currentPage is greater than 1, then enable the previous button */}
 			<button onClick={handlePrevious} disabled={currentPage === 1}>
 				Previous
 			</button>
@@ -57,7 +62,7 @@ export default function Pagination({
 					{number}
 				</button>
 			))}
-			{/* if currentPage is less than the total number of pages, then show the next button */}
+			{/* if currentPage is less than the total number of pages, then enable the next button */}
 			<button
 				onClick={handleNext}
 				disabled={currentPage === pageNumbers.length}

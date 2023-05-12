@@ -9,23 +9,28 @@ import styles from "./Order.module.css";
 
 export default function Order() {
 	const dispatch = useDispatch();
+	// get current orders from redux store so that they persist when unmounting the component
 	const currentOrderByName = useSelector((state) => state.currentOrderByName);
 	const currentOrderByWeight = useSelector(
 		(state) => state.currentOrderByWeight
 	);
 
 	const handleOrderByName = (e) => {
-		window.history.replaceState(null, null, window.location.pathname);
+		// dispatch an action to order the dogs by name
 		dispatch(orderDogsByName(e.target.value));
+		// dispatch an action to update the current order by name
 		dispatch(setCurrentOrderByName(e.target.value));
-		dispatch(setCurrentOrderByWeight(currentOrderByWeight));
+		// apply the current order by weight
+		dispatch(orderDogsByWeight(currentOrderByWeight));
 	};
 
 	const handleOrderByWeight = (e) => {
-		window.history.replaceState(null, null, window.location.pathname);
+		// dispatch an action to order the dogs by weight
 		dispatch(orderDogsByWeight(e.target.value));
+		// dispatch an action to update the current order by weight
 		dispatch(setCurrentOrderByWeight(e.target.value));
-		dispatch(setCurrentOrderByName(currentOrderByName));
+		// apply the current order by name
+		dispatch(orderDogsByName(currentOrderByName));
 	};
 
 	return (

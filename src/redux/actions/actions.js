@@ -1,5 +1,4 @@
 import axios from "axios";
-import { BACKEND_URL } from "../../utils/constants";
 
 import {
 	GET_DOGS,
@@ -23,17 +22,22 @@ import {
 	DELETE_DOG,
 } from "./types";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 export const getDogs = () => async (dispatch) => {
 	try {
 		// GET request to the server
 		const response = await axios.get(`${BACKEND_URL}/dogs`);
+
 		// Dispatch the action with the response data
 		dispatch({
 			type: GET_DOGS,
 			payload: response.data,
 		});
 	} catch (error) {
+		// if there is an error, console.log it
 		console.log(error);
+		console.log("back", BACKEND_URL);
 	}
 };
 
@@ -41,11 +45,13 @@ export const getTemperaments = () => async (dispatch) => {
 	try {
 		// GET request to the server
 		const response = await axios.get(`${BACKEND_URL}/temperaments`);
+		// Dispatch the action with the response data
 		dispatch({
 			type: GET_TEMPERAMENTS,
 			payload: response.data,
 		});
 	} catch (error) {
+		// if there is an error, console.log it
 		console.log(error);
 	}
 };
@@ -60,6 +66,7 @@ export const getDogByName = (name) => async (dispatch) => {
 			payload: response.data,
 		});
 	} catch (error) {
+		// if no dogs are found, dispatch the action with the payload ["No dogs found"]
 		dispatch({
 			type: GET_DOG_BY_NAME,
 			payload: ["No dogs found"],
@@ -77,6 +84,7 @@ export const getDogDetails = (id) => async (dispatch) => {
 			payload: response.data,
 		});
 	} catch (error) {
+		// if no dogs are found, dispatch the action with the payload ["No dogs found"]
 		dispatch({
 			type: GET_DOG_DETAILS,
 			payload: ["No dogs found"],
@@ -94,12 +102,14 @@ export const createDog = (dog) => async (dispatch) => {
 			payload: response.data,
 		});
 	} catch (error) {
+		// if there is an error, return an object with the error and the message
 		return { error: true, message: error.response.data.message };
 	}
 };
 
 export const filterDogsByTemperamentAndCreated =
 	(tempers, created) => (dispatch) => {
+		// Dispatch the action with the payload
 		dispatch({
 			type: FILTER_DOGS_BY_TEMPERAMENT_AND_CREATED,
 			payload: { tempers, created },
@@ -201,6 +211,7 @@ export const updateDog = (dog) => async (dispatch) => {
 			payload: response.data,
 		});
 	} catch (error) {
+		// if there is an error, return an object with the error and the message
 		return { error: true, message: error.response.data.message };
 	}
 };
@@ -215,6 +226,7 @@ export const deleteDog = (id) => async (dispatch) => {
 			payload: id,
 		});
 	} catch (error) {
+		// if there is an error, return an object with the error and the message
 		return { error: true, message: error.response.data.message };
 	}
 };

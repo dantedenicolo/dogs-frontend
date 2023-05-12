@@ -7,6 +7,7 @@ function App() {
 	const isNavigationRoute = useIsNavigationRoute();
 	return (
 		<div className="App">
+			{/* Only render the Nav component when the route is a navigation route */}
 			{isNavigationRoute && <Nav />}
 			<Routes>
 				<Route path="/" element={<Landing />} />

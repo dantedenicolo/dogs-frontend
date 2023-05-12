@@ -75,6 +75,8 @@ export default function reducer(state = initialState, action) {
 			const allDogs = [...state.dogFilters];
 			// Define a new array with the dogs filtered
 			const filteredDogs = [];
+
+			// If the action payload is "any" or "default", return the state with all the dogs
 			if (
 				(action.payload.tempers === "any" ||
 					action.payload.tempers === "default") &&
@@ -85,6 +87,7 @@ export default function reducer(state = initialState, action) {
 					...state,
 					dogs: allDogs,
 				};
+				// If the action payload is has a value for created but not for tempers, return the new state with the dogs filtered by created
 			} else if (
 				(action.payload.tempers === "any" ||
 					action.payload.tempers === "default") &&
@@ -92,16 +95,19 @@ export default function reducer(state = initialState, action) {
 				action.payload.created !== "default"
 			) {
 				allDogs.forEach((dog) => {
+					// if the payload is "created", return the new state with the dogs created in the database
 					if (action.payload.created === "created") {
 						if (dog.createdInDb) {
 							filteredDogs.push(dog);
 						}
+						// else, return the new state with the dogs not created in the database
 					} else {
 						if (!dog.createdInDb) {
 							filteredDogs.push(dog);
 						}
 					}
 				});
+				// If the action payload is has a value for tempers but not for created, return the new state with the dogs filtered by temperament
 			} else if (
 				action.payload.tempers !== "any" &&
 				action.payload.tempers !== "default" &&
@@ -109,13 +115,17 @@ export default function reducer(state = initialState, action) {
 					action.payload.created === "default")
 			) {
 				allDogs.forEach((dog) => {
+					// check for the dogs that have the selected temperament
 					if (dog.temperament?.includes(action.payload.tempers)) {
 						filteredDogs.push(dog);
 					}
 				});
+				// If the action payload is has a value for tempers and for created, return the new state with the dogs filtered by temperament and created
 			} else {
 				allDogs.forEach((dog) => {
+					// check for the dogs that have the selected temperament
 					if (dog.temperament?.includes(action.payload.tempers)) {
+						// check for the dogs that are created in the database and push them according to the payload
 						if (action.payload.created === "created") {
 							if (dog.createdInDb) {
 								filteredDogs.push(dog);
@@ -129,6 +139,7 @@ export default function reducer(state = initialState, action) {
 				});
 			}
 
+			// If the filteredDogs array is empty, push a message
 			if (filteredDogs.length === 0) {
 				filteredDogs.push("No dogs found");
 			}
@@ -143,6 +154,7 @@ export default function reducer(state = initialState, action) {
 			// Define a new array with all the dogs
 			const allDogsByName = [...state.dogs];
 
+			// If the action payload is "any" or "default", return the state with all the dogs
 			if (action.payload === "any" || action.payload === "default") {
 				return {
 					...state,
@@ -164,6 +176,7 @@ export default function reducer(state = initialState, action) {
 							return 0;
 					  });
 
+			// If the dogsByName array is empty, push a message
 			if (dogsByName.length === 0) {
 				dogsByName.push("No dogs found");
 			}
@@ -176,16 +189,20 @@ export default function reducer(state = initialState, action) {
 		case ORDER_DOGS_BY_WEIGHT:
 			// Define a new array with all the dogs
 			const allDogsByWeight = [...state.dogs];
+
+			// Transform the weightMin and weightMax values to numbers (if they are not numbers, return 0)
 			const weightMin = (dog) => {
 				return Number(dog.weightMin) || 0;
 			};
 			const weightMax = (dog) => {
 				return Number(dog.weightMax) || 0;
 			};
+			// Calculate the average weight of the dog
 			const weightAvg = (dog) => {
 				return (weightMin(dog) + weightMax(dog)) / 2;
 			};
 
+			// If the action payload is "any" or "default", return the state with all the dogs
 			if (action.payload === "any" || action.payload === "default") {
 				return {
 					...state,
@@ -194,20 +211,21 @@ export default function reducer(state = initialState, action) {
 			}
 
 			const dogsByWeight =
-				// If the action payload is "asc", return the new state with the dogs ordered by weight ascending
+				// If the action payload is "asc", return the new state with the dogs ordered by weight average ascending
 				action.payload === "asc"
 					? allDogsByWeight.sort((a, b) => {
 							if (weightAvg(a) > weightAvg(b)) return 1;
 							if (weightAvg(a) < weightAvg(b)) return -1;
 							return 0;
 					  })
-					: // Else, return the new state with the dogs ordered by weight descending
+					: // Else, return the new state with the dogs ordered by weight average descending
 					  allDogsByWeight.sort((a, b) => {
 							if (weightAvg(a) > weightAvg(b)) return -1;
 							if (weightAvg(a) < weightAvg(b)) return 1;
 							return 0;
 					  });
 
+			// If the dogsByWeight array is empty, push a message
 			if (dogsByWeight.length === 0) {
 				dogsByWeight.push("No dogs found");
 			}
@@ -261,7 +279,7 @@ export default function reducer(state = initialState, action) {
 		// If the action type is RESET_STATE, return the initial state
 		case RESET_STATE:
 			return initialState;
-		// If the action type is RESET_FILTERS_AND_ORDER, return the new state with the dogs array updated
+		// If the action type is RESET_FILTERS_AND_ORDER, return the new state with the filters and order reseted
 		case RESET_FILTERS_AND_ORDER:
 			return {
 				...state,
@@ -281,6 +299,7 @@ export default function reducer(state = initialState, action) {
 				...state,
 			};
 
+		// If the action type is not defined, just return the state
 		default:
 			return state;
 	}
