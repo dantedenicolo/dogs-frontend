@@ -1,112 +1,112 @@
 .searchbarContainer {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	height: 50px;
-	margin-top: 10px;
-	margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .searchbar {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .input {
-	width: auto;
-	height: 30px;
-	border-radius: 9999px;
-	border: 2px solid #e8a249;
-	padding-left: 10px;
-	padding-right: 10px;
-	background-color: #575e55;
-	transition: background-color 0.25s;
-	color: #e8a249;
-	font-size: 0.9rem;
-	font-weight: 700;
+  width: auto;
+  height: 30px;
+  border-radius: 9999px;
+  border: 2px solid #e8a249;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #575e55;
+  transition: background-color 0.25s;
+  color: #e8a249;
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .button {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: auto;
-	height: 35px;
-	margin-left: 10px;
-	border-radius: 9999px;
-	border: 2px solid #e8a249;
-	background-color: #e8a249;
-	transition: background-color 0.25s, color 0.25s, border 0.25s;
-	color: #575e55;
-	font-size: 0.9rem;
-	font-weight: 700;
-	cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: 35px;
+  margin-left: 10px;
+  border-radius: 9999px;
+  border: 2px solid #e8a249;
+  background-color: #e8a249;
+  transition: background-color 0.25s, color 0.25s, border 0.25s;
+  color: #575e55;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .button:hover {
-	background-color: #ae6d18;
-	color: #fff;
-	border: 2px solid #ae6d18;
+  background-color: #ae6d18;
+  color: #fff;
+  border: 2px solid #ae6d18;
 }
 
 .button:disabled {
-	background-color: #ae6d18;
-	color: #ced0cd;
-	border: 2px solid #ae6d18;
-	cursor: default;
+  background-color: #ae6d18;
+  color: #ced0cd;
+  border: 2px solid #ae6d18;
+  cursor: default;
 }
 
 .input::placeholder {
-	color: #e8a249;
-	font-size: 0.9rem;
-	font-weight: 700;
+  color: #e8a249;
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .input:focus {
-	outline: none;
-	background-color: #e8a249;
-	color: #575e55;
+  outline: none;
+  background-color: #e8a249;
+  color: #575e55;
 }
 
 .input:focus + .reset {
-	color: #575e55;
+  color: #575e55;
 }
 
 .input:focus + .reset:hover {
-	color: #454a43;
+  color: #454a43;
 }
 
 .input:focus::placeholder {
-	color: #575e55;
+  color: #575e55;
 }
 
 .input:not(:placeholder-shown) {
-	background-color: #e8a249;
-	color: #575e55;
+  background-color: #e8a249;
+  color: #575e55;
 }
 
 .input:not(:placeholder-shown) + .reset {
-	color: #575e55;
+  color: #575e55;
 }
 
 .input:not(:placeholder-shown) + .reset:hover {
-	color: #454a43;
+  color: #454a43;
 }
 
 .reset {
-	position: absolute;
-	margin-left: 80px;
-	cursor: pointer;
-	color: #e8a249;
-	font-size: 0.9rem;
-	font-weight: 700;
-	transition: color 0.25s;
+  position: absolute;
+  margin-left: 100px;
+  cursor: pointer;
+  color: #e8a249;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: color 0.25s;
 }
 
 .reset:hover {
-	color: #ae6d18;
+  color: #ae6d18;
 }
